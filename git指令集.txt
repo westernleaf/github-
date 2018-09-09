@@ -1,0 +1,97 @@
+工作区：电脑上的目录
+版本库：————git add提交到暂存区，再用git commit 提交到当前分支
+
+
+mkdir    XX（创建一个空目录XX）
+
+pwd      显示当前目录路径
+
+git init    新建管理仓库
+
+git add <文件名>（readme.txt）  将文件添加到暂存区
+
+git commit    将文件提交到仓库
+
+git commit -m '(提交时的注释)'
+
+git status       查看文件状态
+
+git diff <文件名>  查看文件修改内容
+
+git log   查看历史记录    （commit后面为每次提交的版本号）
+
+git log --pretty=oneline    将信息显示为一行
+
+git reset --hard HEAD^  回退到上一个版本
+
+cat <文件名>   查看文件的内容
+
+git reflog    获得版本号
+
+git reset --hard 版本号  进行恢复（版本号是HEAD@{5}这样的前面的16进制数组）
+
+git checkout -- <文件名>  撤销，即丢弃工作区的修改
+   注意，此时会有两种情况：
+	1.这个文件自从修改以后还没有放到暂存区，使用撤销修改就回到了和版本库一模一样的状态。
+	2.若是放到了暂存区，接着又做了修改，撤销修改之后就回到了添加暂存区后的状态。
+
+注意问题：--必须有，否则就是创建一个分支了
+
+
+
+rm <文件名>      删除文件（若是想要彻底删除的话，需要再一次commit一下，很好理解）
+
+若是没有commit的话，若想找回文件，依旧使用git checkout -- <文件名>
+
+
+在第一次推送master分支时，应该这样写：
+git push -u origin master
+之后的推送中就可以不用-u了。
+
+
+git clone +<网址> 例：https://github.com/westernleaf/test.git  克隆版本库到本地     
+
+
+git branch dev    创建分支 dev
+git checkout dev  切换分支dev
+git branch        列出所有分支
+git merge dev     将dev分支合并到当前分支上
+git branch -d dev  删除分支dev
+git checkout -b dev 创建并切换分支dev
+
+那么我们该如何解决分支合并所产生的冲突呢？？？
+
+Git使用<<<<<<<,=======,>>>>>>>标记出不同分支的内容，其中<<<HEAD是指主分支修改的内容，>>>feature(该分支的名字)是指feature分支修改的内容。
+
+解决方法：将自己的分支内容先改成和主分支一样，再进行合并。
+
+
+
+一般情况下，git采用删除分支会丢掉分支信息的模式，我们可以通过禁用该模式：
+git merge --no-ff -m"merge with no-ff" dev
+
+
+
+git stash     将当前工作状态隐藏起来。
+等需要再一次使用的时候，先回到当前分支，之后 git stash list找到工作现场。
+恢复工作状态有两个方法：
+	1.git stash apply恢复，恢复后，stash内容不删除，需要使用git stash drop 来进行删除
+	2.git stash pop，恢复的同时删除了stash内容
+
+
+git remote 查看远程库的信息
+git remote -v 查看远程库的详细信息（fetch--抓取、push--推送）
+
+git pull指令报错原因：没有指定本地dev分支和远程origin/dev分支的链接。
+解决方案：git branch --set-upstream dev origin/dev
+
+
+
+多人协作工作模式一般是这样的：
+1.首先试图使用git push origin branch-name推送自己的修改
+2.如果推送失败，则是因为远程分支更新早于你的本地更新，需要先用git pull试图合并
+3.若合并有冲突则解决冲突，直到成功以后在本地提交，之后再用git push origin branch-name进行推送
+
+
+
+
